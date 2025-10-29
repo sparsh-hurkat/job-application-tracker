@@ -11,6 +11,9 @@ A React-based browser extension that automatically detects and tracks job applic
 - 🔔 **Notifications**: Get notified when an application is tracked
 - 🌐 **Wide Support**: Works with LinkedIn, Indeed, Glassdoor, Greenhouse, Lever, Workday, and more
 
+![Job Application Tracker Screenshot](public/ss1.png)
+![Job Application Tracker Screenshot](public/ss2.png)
+
 ## Supported Job Sites
 
 - LinkedIn
