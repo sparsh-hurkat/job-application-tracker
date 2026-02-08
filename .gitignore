@@ -27,6 +27,9 @@ yarn-error.log*
 *.swo
 *~
 
+# Configuration files with secrets
+src/config.js
+
 # OS
 .DS_Store
 Thumbs.db

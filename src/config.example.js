@@ -1,4 +1,5 @@
-// Configuration file - Edit this with your details
+// Configuration file - COPY THIS TO config.js AND FILL IN YOUR VALUES
+// DO NOT COMMIT config.js TO GIT - it contains sensitive API keys
 
 export const config = {
   coverLetterTemplate: `**Dear Hiring Manager,**
@@ -11,7 +12,7 @@ Beyond production systems, I have built modular, scalable architectures for comp
 
 I am particularly drawn to [Company Name] because of [specific product, mission, tech stack, or engineering challenge], and I would be excited to contribute my experience building reliable, scalable, and maintainable systems to your engineering team.
 
-Thank you for your time and consideration. I look forward to the opportunity to discuss how my experience aligns with your team’s goals.
+Thank you for your time and consideration. I look forward to the opportunity to discuss how my experience aligns with your team's goals.
 
 Sincerely,
 Sparsh Hurkat
@@ -63,5 +64,7 @@ HONORS
 Recipient, William W. and Ruth F. Cooper Fellowship for demonstrated academic excellence & professional accomplishments
 `,
 
-  geminiApiKey: ''
+  // Get your Gemini API key from: https://aistudio.google.com/app/apikey
+  // Replace the placeholder below with your actual key
+  geminiApiKey: 'your-gemini-api-key-here'
 };
