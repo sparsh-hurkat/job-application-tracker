@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import CoverLetterGenerator from './CoverLetterGenerator';
 /* global chrome */
 
 function App() {
@@ -103,6 +104,12 @@ function App() {
           onClick={() => setActiveTab('stats')}
         >
           Statistics
+        </button>
+        <button 
+          className={`tab ${activeTab === 'coverLetter' ? 'active' : ''}`}
+          onClick={() => setActiveTab('coverLetter')}
+        >
+          Cover Letter
         </button>
       </div>
 
@@ -216,6 +223,10 @@ function App() {
               </div>
             )}
           </div>
+        )}
+
+        {activeTab === 'coverLetter' && (
+          <CoverLetterGenerator />
         )}
       </div>
 

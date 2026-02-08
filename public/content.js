@@ -84,26 +84,28 @@ function extractApplicationData(form) {
   return data;
 }
 
-// Extract company name from page
+// Extract company name from page - improved detection
 function extractCompanyName() {
-  // Try common selectors
-  const selectors = [
-    '[class*="company"]',
-    '[class*="employer"]',
-    '[data-company]',
-    'h1, h2, h3'
-  ];
-  
-  for (const selector of selectors) {
-    const element = document.querySelector(selector);
-    if (element) {
-      const text = element.innerText.trim();
-      if (text && text.length < 100) {
-        return text;
-      }
-    }
+  // Strategy 1: LinkedIn job posting
+  const linkedinCompany = document.querySelector('[data-tracking-control="COMPANY_NAME"]')?.innerText ||
+    document.querySelector('a[href*="/company/"]')?.innerText;
+  if (linkedinCompany) return linkedinCompany.trim();
+
+  // Strategy 2: Indeed
+  const indeedCompany = document.querySelector('[data-company-name]')?.innerText;
+  if (indeedCompany) return indeedCompany.trim();
+
+  // Strategy 3: Page title often has company name
+  const titleMatch = document.title.match(/at\s+([^|\-]*)/i);
+  if (titleMatch) return titleMatch[1].trim();
+
+  // Strategy 4: First heading that's not too long
+  const heading = document.querySelector('h1') || document.querySelector('h2');
+  if (heading) {
+    const text = heading.innerText.trim();
+    if (text.length < 80 && !text.toLowerCase().includes('apply')) return text;
   }
-  
+
   return 'Unknown Company';
 }
 
@@ -201,5 +203,56 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       url: window.location.href
     });
   }
+
+  if (request.type === 'EXTRACT_PAGE_INFO') {
+    const companyName = extractCompanyName();
+    const jobDescription = extractJobDescription();
+    
+    sendResponse({
+      companyName: companyName !== 'Unknown Company' ? companyName : '',
+      jobDescription: jobDescription
+    });
+  }
 });
+
+// Extract job description from page
+function extractJobDescription() {
+  // Try multiple strategies to find job description
+  const selectors = [
+    '[class*="description"]',
+    '[class*="job-details"]',
+    '[class*="job-description"]',
+    '[id*="description"]',
+    '[id*="job-details"]',
+    'article',
+    '[role="main"]',
+  ];
+
+  for (const selector of selectors) {
+    const element = document.querySelector(selector);
+    if (element) {
+      const text = element.innerText;
+      if (text && text.length > 200) {
+        return text.substring(0, 1200); // Limit to 1200 chars to save tokens
+      }
+    }
+  }
+
+  // Fallback: Get all paragraphs and concatenate
+  const paragraphs = document.querySelectorAll('p, li, div[class*="text"]');
+  let descriptionText = '';
+  
+  paragraphs.forEach(p => {
+    const text = p.innerText.trim();
+    if (text.length > 20 && text.length < 500) {
+      descriptionText += text + '\n';
+    }
+  });
+
+  if (descriptionText.length > 200) {
+    return descriptionText.substring(0, 1200);
+  }
+
+  return '';
+}
 
