@@ -63,5 +63,5 @@ HONORS
 Recipient, William W. and Ruth F. Cooper Fellowship for demonstrated academic excellence & professional accomplishments
 `,
 
-  geminiApiKey: 'AIzaSyCpSpNEokdZ7W6dDP2P_Gn8q9E7bHVwxiY'
+  geminiApiKey: ''
 };
